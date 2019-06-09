@@ -7,7 +7,7 @@ app.config['SECRET_KEY'] = 'super-secret'
 api = Api(app, prefix="/api/v1")
 
 USER_DATA = {
-    "masnun": "abc123"
+    "mahmad": "abc123"
 }
 
 
