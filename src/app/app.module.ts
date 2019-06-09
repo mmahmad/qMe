@@ -8,6 +8,11 @@ import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 
 import { RouterModule, Routes } from '@angular/router';
+import { RegisterCompanyComponent } from './register-company/register-company.component';
+import { RegisterEmployeeComponent } from './register-employee/register-employee.component';
+import { RegisterUserComponent } from './register-user/register-user.component';
+
+import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes = [
   { path: 'login/', component: LoginComponent },
@@ -27,7 +32,10 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterCompanyComponent,
+    RegisterEmployeeComponent,
+    RegisterUserComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -36,7 +44,8 @@ const appRoutes: Routes = [
     ),
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
