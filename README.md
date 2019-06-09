@@ -1,8 +1,17 @@
 # QMe
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.7.
+IN DEVELOPMENT
 
 ## Development server
+
+Each module of the application, front-end, back-end, and database, has been Docker-containerized for easy development and development.
+
+The project uses:
+- Angular, for the front-end
+- Flask, for the APIs
+- Postgres as the DBMS
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.7.
 
 1) Install <a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a>
 2) Clone the repo
