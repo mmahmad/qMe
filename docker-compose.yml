@@ -1,0 +1,45 @@
+version: '3.4'
+
+services:
+
+  flask:
+    container_name: flask
+    build: ./flask-server
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./flask-server:/app
+    environment:
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_USERNAME=${PG_USER}
+      - PG_PASSWORD=${PG_PWD}
+  angular:
+    container_name: angular
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - '4201:4200'
+    environment:
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_USERNAME=${PG_USER}
+      - PG_PASSWORD=${PG_PWD}
+      - RUN_MIGRATIONS=true
+  
+  postgres:
+    container_name: postgres
+    image: postgres:11-alpine
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    environment:
+      - PG_USERNAME=${PG_USER}
+      - PG_PASSWORD=${PG_PWD}
+volumes:
+  pg-data:
