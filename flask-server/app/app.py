@@ -5,6 +5,17 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 
+# database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}'.format(
+#     # dbuser=os.environ['postgres'],
+#     # dbpass=os.environ['docker'],
+#     # dbhost=os.environ['localhost'],
+#     # dbname=os.environ['qMe']
+#     dbuser='postgres',
+#     dbpass='docker',
+#     dbhost='localhost',
+#     dbname='qMe'
+# )
+
 database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}'.format(
     # dbuser=os.environ['postgres'],
     # dbpass=os.environ['docker'],
@@ -12,7 +23,9 @@ database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}'.forma
     # dbname=os.environ['qMe']
     dbuser='postgres',
     dbpass='docker',
-    dbhost='localhost',
+    # dbhost='localhost',
+    dbhost='postgres',
+    # dbhost='172.26.0.2'
     dbname='qMe'
 )
 
@@ -39,9 +52,20 @@ def view_registered_guests():
     return render_template('guest_list.html', guests=guests)
 
 
-@app.route('/register', methods=['GET'])
-def view_registration_form():
-    return render_template('guest_registration.html')
+@app.route('/registerUser', methods=['POST'])
+def regiserUser():
+    # return render_template('guest_registration.html')
+    from models import User
+    fname = request.form.get('fname')
+    lname = request.form.get('lname')
+    email = request.form.get('email')
+    username = request.form.get('username')
+    pwd = request.form.get('pwd')
+    phone_number = request.form.get('phone_number')
+
+    user = User(id=None, fname=fname, lname=lname, email=email, phone_number=phone_number, username=username, pwd=pwd)
+    db.session.add(user)
+    db.session.commit()
 
 
 @app.route('/register', methods=['POST'])
