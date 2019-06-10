@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
@@ -54,6 +54,7 @@ def view_registered_guests():
 
 @app.route('/registerUser', methods=['POST'])
 def regiserUser():
+    failed=False
     # return render_template('guest_registration.html')
     from models import User
     fname = request.form.get('fname')
@@ -65,7 +66,34 @@ def regiserUser():
 
     user = User(id=None, fname=fname, lname=lname, email=email, phone_number=phone_number, username=username, pwd=pwd)
     db.session.add(user)
-    db.session.commit()
+    try:
+        db.session.commit()
+        failed=False
+    except Exception as e:
+        # log
+        print(e)
+
+        db.session.rollback()
+        db.session.flush()
+        failed=True
+        return jsonify(e), 400
+
+    if not failed:
+        return jsonify({
+            'fname': fname,
+            'lname': lname,
+            'email': email,
+            'phone_number': phone_number,
+            'username': username
+        }), 200
+    # else:
+    #     return jsonify({
+    #         'fname': fname,
+    #         'lname': lname,
+    #         'email': email,
+    #         'phone_number': phone_number,
+    #         'username': username
+    #     }), 400
 
 
 @app.route('/register', methods=['POST'])
