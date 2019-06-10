@@ -4,18 +4,6 @@ from flask import Flask, render_template, request, jsonify
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-
-# database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}'.format(
-#     # dbuser=os.environ['postgres'],
-#     # dbpass=os.environ['docker'],
-#     # dbhost=os.environ['localhost'],
-#     # dbname=os.environ['qMe']
-#     dbuser='postgres',
-#     dbpass='docker',
-#     dbhost='localhost',
-#     dbname='qMe'
-# )
-
 database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}'.format(
     # dbuser=os.environ['postgres'],
     # dbpass=os.environ['docker'],
@@ -23,9 +11,7 @@ database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}'.forma
     # dbname=os.environ['qMe']
     dbuser='postgres',
     dbpass='docker',
-    # dbhost='localhost',
     dbhost='postgres',
-    # dbhost='172.26.0.2'
     dbname='qMe'
 )
 
