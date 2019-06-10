@@ -76,7 +76,7 @@ def regiserUser():
         db.session.rollback()
         db.session.flush()
         failed=True
-        return jsonify(e), 400
+        return jsonify(error=500, text=str(e)), 500
 
     if not failed:
         return jsonify({
@@ -86,14 +86,6 @@ def regiserUser():
             'phone_number': phone_number,
             'username': username
         }), 200
-    # else:
-    #     return jsonify({
-    #         'fname': fname,
-    #         'lname': lname,
-    #         'email': email,
-    #         'phone_number': phone_number,
-    #         'username': username
-    #     }), 400
 
 
 @app.route('/register', methods=['POST'])

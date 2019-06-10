@@ -18,12 +18,12 @@ class User(db.Model):
 
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String(25))
-    lname = db.Column(db.String(25))
-    email = db.Column(db.String(50))
-    phone_number = db.Column(db.String(20))
-    username = db.Column(db.String(15))
-    pwd = db.Column(db.String(50))
+    fname = db.Column(db.String(25), nullable=False)
+    lname = db.Column(db.String(25), nullable=False)
+    email = db.Column(db.String(50), nullable=False, unique=True)
+    phone_number = db.Column(db.String(20), nullable=False, unique=True)
+    username = db.Column(db.String(15), nullable=False, unique=True)
+    pwd = db.Column(db.String(50),  nullable=False)
 
     def __init__(self, id=None, fname=None, lname=None, email=None, phone_number=None, username=None, pwd=None):
         self.id = None
