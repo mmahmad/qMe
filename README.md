@@ -20,4 +20,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 5) Navigate to `localhost:4201` for the front-end
 6) Navigate to `localhost:5000` for the back-end
 
+To access Postgres from host: `host='localhost'` and `port=32000`
+To access Postgres from container: `host='postgres'` and `port=5432`
+
 The front-end app will automatically reload if you change any of the source files.
