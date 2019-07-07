@@ -47,7 +47,8 @@ services:
     ports:
       - '32000:5432'
     environment:
-      - PG_USERNAME=${PG_USER}
-      - PG_PASSWORD=${PG_PWD}
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PWD}
+      - POSTGRES_DB=${POSTGRES_DB}
 volumes:
   pg-data:
