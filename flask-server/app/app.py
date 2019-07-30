@@ -51,26 +51,35 @@ def view_registered_guests():
 """
 curl -X POST \
   http://localhost:5000/api/v1/merchant/register \
-  -H 'Postman-Token: 67654232-ffda-4d5c-b6b2-f59b35ff4209' \
+  -H 'Postman-Token: 719bdb25-d0b0-4fb8-9afb-5487b830dc28' \
   -H 'cache-control: no-cache' \
   -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
-  -F merchant_name=Walmart \
-  -F 'merchant_address_1=105 N Busey Avenue' \
-  -F 'merchant_address_2=Apt 104' \
-  -F merchant_address_city=Urbana \
+  -F 'merchant_name=Aldy'\''s' \
+  -F 'merchant_address_1=410 E University' \
+  -F merchant_address_2= \
+  -F merchant_address_city=Champaign \
   -F merchant_address_state=IL \
-  -F merchant_address_zipcode=61801 \
+  -F merchant_address_zipcode=61820 \
   -F merchant_address_country=USA \
-  -F merchant_primary_email=moaaz1234@gmail.com \
-  -F merchant_primary_phone=6179094234
+  -F merchant_primary_email=walmart5@gmail.com \
+  -F merchant_primary_phone=2175422
 
 Response:
 
 {
-  "merchant_access_id": "fhlqcfbnuswgznsvucmstvli",
-  "merchant_access_key": "bszvuypqiycgavcmssgaqhuiuynkrvhjhrunwtmngtyswgvomzcdwqmrlbdbbaoe",
-  "merchant_auth": "fubglvvijxnpaanc",
-  "merchant_uuid": "d1e896f1-17af-4694-9245-b4f29f5c13e7"
+  "merchant_access_id": "gkqmvtrvifrkgffihlpoyttm",
+  "merchant_access_key": "oqrephadtijpeofyvdakuascnsczhgubsbserngsbawypmfuhrcauouuoffjsfaz",
+  "merchant_address_1": "410 E University",
+  "merchant_address_2": "",
+  "merchant_address_city": "Champaign",
+  "merchant_address_country": "USA",
+  "merchant_address_state": "IL",
+  "merchant_address_zipcode": "61820",
+  "merchant_auth": "nrsbkfqgsgckwpqo",
+  "merchant_name": "Aldy's",
+  "merchant_primary_email": "walmart5@gmail.com",
+  "merchant_primary_phone": "2175422",
+  "merchant_uuid": "700769e9-5a1d-4941-b24f-cf15fde640c7"
 }
 """
 @app.route('/api/v1/merchant/register', methods=['POST'])
@@ -120,7 +129,17 @@ def register_merchant():
             'merchant_uuid': merchant_uuid,
             'merchant_auth': merchant_auth,
             'merchant_access_id': merchant_access_id,
-            'merchant_access_key': merchant_access_key
+            'merchant_access_key': merchant_access_key,
+            # request body
+            'merchant_name': merchant_name,
+            'merchant_address_1': merchant_address_1,
+            'merchant_address_2': merchant_address_2,
+            'merchant_address_city': merchant_address_city,
+            'merchant_address_state': merchant_address_state,
+            'merchant_address_zipcode': merchant_address_zipcode,
+            'merchant_address_country': merchant_address_country,
+            'merchant_primary_email': merchant_primary_email,
+            'merchant_primary_phone': merchant_primary_phone 
         }), 200
 
 @app.route('/api/v1/counter/merchant/<merchant_uuid>/register', methods=['POST'])
