@@ -48,7 +48,31 @@ def view_registered_guests():
     guests = Guest.query.all()
     return render_template('guest_list.html', guests=guests)
 
+"""
+curl -X POST \
+  http://localhost:5000/api/v1/merchant/register \
+  -H 'Postman-Token: 67654232-ffda-4d5c-b6b2-f59b35ff4209' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -F merchant_name=Walmart \
+  -F 'merchant_address_1=105 N Busey Avenue' \
+  -F 'merchant_address_2=Apt 104' \
+  -F merchant_address_city=Urbana \
+  -F merchant_address_state=IL \
+  -F merchant_address_zipcode=61801 \
+  -F merchant_address_country=USA \
+  -F merchant_primary_email=moaaz1234@gmail.com \
+  -F merchant_primary_phone=6179094234
 
+Response:
+
+{
+  "merchant_access_id": "fhlqcfbnuswgznsvucmstvli",
+  "merchant_access_key": "bszvuypqiycgavcmssgaqhuiuynkrvhjhrunwtmngtyswgvomzcdwqmrlbdbbaoe",
+  "merchant_auth": "fubglvvijxnpaanc",
+  "merchant_uuid": "d1e896f1-17af-4694-9245-b4f29f5c13e7"
+}
+"""
 @app.route('/api/v1/merchant/register', methods=['POST'])
 def register_merchant():
     merchant_uuid = str(uuid.uuid4())
@@ -93,10 +117,19 @@ def register_merchant():
 
     if not failed:
         return jsonify({
+            'merchant_uuid': merchant_uuid,
             'merchant_auth': merchant_auth,
             'merchant_access_id': merchant_access_id,
             'merchant_access_key': merchant_access_key
         }), 200
+
+@app.route('/api/v1/counter/merchant/<merchant_uuid>/register', methods=['POST'])
+def register_merchant_counter(merchant_uuid):
+    return jsonify({
+    'merchant_uuid': merchant_uuid,
+    'merchant_access_id': merchant_access_id,
+    'merchant_access_key': merchant_access_key
+    }), 200
 
 def generate_merchant_auth(stringLength=16):
     """Generate a random string of fixed length """
