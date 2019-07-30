@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import uuid
 import random
@@ -30,6 +31,9 @@ app.config.update(
 
 # import app.models.model_merchant.merchant as Merchant
 from models.model_merchant import merchant
+# from models.model_merchant import model_merchant_timings
+
+
 # initialize the database connection
 db = SQLAlchemy(app)
 
@@ -141,6 +145,31 @@ def register_merchant():
             'merchant_primary_email': merchant_primary_email,
             'merchant_primary_phone': merchant_primary_phone 
         }), 200
+
+@app.route('/api/v1/merchant/<merchant_uuid>/timings', methods=['POST', 'PUT', 'GET'])
+def set_merchant_timings(merchant_uuid):
+    if request.method == 'POST':
+        # m = model_merchant_timings.MerchantTimings(uuid=merchant_uuid, saturday_start=datetime.utcnow().time(), saturday_end=datetime.utcnow().time())
+        m = merchant.MerchantTimings(uuid=merchant_uuid, saturday_start=datetime.utcnow().time(), saturday_end=datetime.utcnow().time())
+        db.session.add(m)
+        try:
+            db.session.commit()
+            failed = False
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            failed = True
+            return jsonify(error=500, text=str(e)), 500
+
+        if not failed:
+            return jsonify({
+                'merchant_uuid': merchant_uuid,
+            }), 200
+
+    elif request.method == 'PUT':
+        raise NotImplementedError
+    elif request.method == 'GET':
+        raise NotImplementedError
 
 @app.route('/api/v1/counter/merchant/<merchant_uuid>/register', methods=['POST'])
 def register_merchant_counter(merchant_uuid):
