@@ -146,11 +146,212 @@ def register_merchant():
             'merchant_primary_phone': merchant_primary_phone 
         }), 200
 
+"""
+curl -X POST \
+  http://localhost:5000/api/v1/merchant/5a795a93-c851-44c4-9017-2c83234db208/timings \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Length: 1696' \
+  -H 'Content-Type: multipart/form-data; boundary=--------------------------338275155018184137878876' \
+  -H 'Host: localhost:5000' \
+  -H 'Postman-Token: b491c5ea-db01-4052-a58f-8ddd32239251,56b6b96d-8915-43e4-bea0-319aa84b8ac7' \
+  -H 'User-Agent: PostmanRuntime/7.15.2' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -F saturday_start=7:00am \
+  -F saturday_end=5:00pm \
+  -F sunday_start=7:00am \
+  -F sunday_end=5:00pm \
+  -F monday_start=7:00am \
+  -F monday_end=5:00pm \
+  -F tuesday_start=7:00am \
+  -F tuesday_end=5:00pm \
+  -F wednesday_start=7:00am \
+  -F wednesday_end=5:00pm \
+  -F thursday_start=7:00am \
+  -F thursday_end=5:00pm \
+  -F friday_start=7:00am \
+  -F friday_end=5:00pm
+
+response:
+{
+  "friday_end": "05:00PM",
+  "friday_start": "07:00AM",
+  "merchant_uuid": "5a795a93-c851-44c4-9017-2c83234db208",
+  "monday_end": "05:00PM",
+  "monday_start": "07:00AM",
+  "saturday_end": "05:00PM",
+  "saturday_start": "07:00AM",
+  "sunday_end": "05:00PM",
+  "sunday_start": "07:00AM",
+  "thursday_end": "05:00PM",
+  "thursday_start": "07:00AM",
+  "tuesday_end": "05:00PM",
+  "tuesday_start": "07:00AM",
+  "wednesday_end": "05:00PM",
+  "wednesday_start": "07:00AM"
+}
+
+#####################################################################################
+
+curl -X PUT \
+  http://localhost:5000/api/v1/merchant/5a795a93-c851-44c4-9017-2c83234db208/timings \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Length: 292' \
+  -H 'Content-Type: multipart/form-data; boundary=--------------------------965584490552121345786645' \
+  -H 'Host: localhost:5000' \
+  -H 'Postman-Token: d747e4c6-ca0c-4bc9-83af-02d4c1331dec,463efd3a-12ab-4ca3-91a5-b79b07791660' \
+  -H 'User-Agent: PostmanRuntime/7.15.2' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -F saturday_start=1:00pm \
+  -F saturday_end=4:00pm
+
+response:
+{
+  "merchant_uuid": "5a795a93-c851-44c4-9017-2c83234db208",
+  "saturday_end": "04:00PM",
+  "saturday_start": "01:00PM"
+}
+
+#####################################################################################
+
+curl -X GET \
+  http://localhost:5000/api/v1/merchant/5a795a93-c851-44c4-9017-2c83234db208/timings \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Connection: keep-alive' \
+  -H 'Host: localhost:5000' \
+  -H 'Postman-Token: 53ba9c16-a1c9-4e1e-a726-48b20829f0f6,a437d8aa-0a12-44f4-ac0c-2349c2b9bacc' \
+  -H 'User-Agent: PostmanRuntime/7.15.2' \
+  -H 'cache-control: no-cache'
+
+response:
+
+{
+  "friday_end": null,
+  "friday_start": null,
+  "monday_end": null,
+  "monday_start": null,
+  "saturday_end": "04:24AM",
+  "saturday_start": "04:24AM",
+  "sunday_end": null,
+  "sunday_start": null,
+  "thursday_end": null,
+  "thursday_start": null,
+  "tuesday_end": null,
+  "tuesday_start": null,
+  "uuid": "35cfc9c6-8336-4b10-b239-7eb1bc11091f",
+  "wednesday_end": null,
+  "wednesday_start": null
+}
+
+"""
 @app.route('/api/v1/merchant/<merchant_uuid>/timings', methods=['POST', 'PUT', 'GET'])
 def set_merchant_timings(merchant_uuid):
+    saturday_start = None
+    saturday_end = None
+    sunday_start = None
+    sunday_end = None
+    monday_start = None
+    monday_end = None
+    tuesday_start = None
+    tuesday_end = None
+    wednesday_start = None
+    wednesday_end = None
+    thursday_start = None
+    thursday_end = None
+    friday_start = None
+    friday_end = None
+
+    times = {}
+
     if request.method == 'POST':
+        # TODO
+        # if request.form.get('merchant_auth_code'):
+        #     merch_auth_code = request.form.get('merchant_auth_code')
+            # verify this auth code is valid for this merchant. If so, proceed with POST
+        if request.form.get('saturday_start'):
+            # t = datetime.strptime('7:00pm', '%I:%M%p').time()
+            saturday_start = datetime.strptime(request.form.get('saturday_start'), '%I:%M%p').time()
+            times['saturday_start'] = saturday_start.strftime("%I:%M%p")
+        if request.form.get('saturday_end'):
+            saturday_end = datetime.strptime(request.form.get('saturday_end'), '%I:%M%p').time() 
+            times['saturday_end'] = saturday_end.strftime("%I:%M%p")
+
+        if request.form.get('sunday_start'):
+            sunday_start = datetime.strptime(request.form.get('sunday_start'), '%I:%M%p').time()
+            times['sunday_start'] = sunday_start.strftime("%I:%M%p")
+        if request.form.get('sunday_end'):
+            sunday_end = datetime.strptime(request.form.get('sunday_end'), '%I:%M%p').time() 
+            times['sunday_end'] = sunday_end.strftime("%I:%M%p")
+
+        if request.form.get('monday_start'):
+            monday_start = datetime.strptime(request.form.get('monday_start'), '%I:%M%p').time()
+            times['monday_start'] = monday_start.strftime("%I:%M%p")
+        if request.form.get('monday_end'):
+            monday_end = datetime.strptime(request.form.get('monday_end'), '%I:%M%p').time() 
+            times['monday_end'] = monday_end.strftime("%I:%M%p")
+
+        if request.form.get('tuesday_start'):
+            tuesday_start = datetime.strptime(request.form.get('tuesday_start'), '%I:%M%p').time()
+            times['tuesday_start'] = tuesday_start.strftime("%I:%M%p")
+        if request.form.get('tuesday_end'):
+            tuesday_end = datetime.strptime(request.form.get('tuesday_end'), '%I:%M%p').time()
+            times['tuesday_end'] = tuesday_end.strftime("%I:%M%p")
+
+        if request.form.get('wednesday_start'):
+            wednesday_start = datetime.strptime(request.form.get('wednesday_start'), '%I:%M%p').time()
+            times['wednesday_start'] = wednesday_start.strftime("%I:%M%p")
+        if request.form.get('wednesday_end'):
+            wednesday_end = datetime.strptime(request.form.get('wednesday_end'), '%I:%M%p').time() 
+            times['wednesday_end'] = wednesday_end.strftime("%I:%M%p")
+
+        if request.form.get('thursday_start'):
+            thursday_start = datetime.strptime(request.form.get('thursday_start'), '%I:%M%p').time()
+            times['thursday_start'] = thursday_start.strftime("%I:%M%p")
+        if request.form.get('thursday_end'):
+            thursday_end = datetime.strptime(request.form.get('thursday_end'), '%I:%M%p').time() 
+            times['thursday_end'] = thursday_end.strftime("%I:%M%p")
+
+        if request.form.get('friday_start'):
+            friday_start = datetime.strptime(request.form.get('friday_start'), '%I:%M%p').time()
+            times['friday_start'] = friday_start.strftime("%I:%M%p")
+        if request.form.get('friday_end'):
+            friday_end = datetime.strptime(request.form.get('friday_end'), '%I:%M%p').time()
+            times['friday_end'] = friday_end.strftime("%I:%M%p")
+
         # m = model_merchant_timings.MerchantTimings(uuid=merchant_uuid, saturday_start=datetime.utcnow().time(), saturday_end=datetime.utcnow().time())
-        m = merchant.MerchantTimings(uuid=merchant_uuid, saturday_start=datetime.utcnow().time(), saturday_end=datetime.utcnow().time())
+        m = merchant.MerchantTimings(
+            uuid=merchant_uuid,
+            
+            saturday_start=saturday_start,
+            saturday_end=saturday_end,
+
+            sunday_start=sunday_start,
+            sunday_end=sunday_end,            
+
+            monday_start=monday_start,
+            monday_end=monday_end,
+
+            tuesday_start=tuesday_start,
+            tuesday_end=tuesday_end,
+
+            wednesday_start=wednesday_start,
+            wednesday_end=wednesday_end,
+
+            thursday_start=thursday_start,
+            thursday_end=thursday_end,
+
+            friday_start=friday_start,
+            friday_end=friday_end
+        )
         db.session.add(m)
         try:
             db.session.commit()
@@ -162,14 +363,108 @@ def set_merchant_timings(merchant_uuid):
             return jsonify(error=500, text=str(e)), 500
 
         if not failed:
-            return jsonify({
-                'merchant_uuid': merchant_uuid,
-            }), 200
+            result = {
+                'merchant_uuid': merchant_uuid
+            }
+            result.update(times)
+            return jsonify(result), 200
 
     elif request.method == 'PUT':
-        raise NotImplementedError
+        # TODO
+        # if request.form.get('merchant_auth_code'):
+        #     merch_auth_code = request.form.get('merchant_auth_code')
+            # verify this auth code is valid for this merchant. If so, proceed with PUT
+        times = {}
+        form_keys = ['saturday_start', 'saturday_end', 'sunday_start', 'sunday_end', 'monday_start', 'monday_end', 'tuesday_start', 'tuesday_end', 'wednesday_start', 'wednesday_end', 'thursday_start', 'thursday_end', 'friday_start', 'friday_end']
+
+        for key in form_keys:
+            if request.form.get(key):
+                value = request.form.get(key)
+                new_time = datetime.strptime(request.form.get(key), '%I:%M%p').time()
+                db.session.query(merchant.MerchantTimings).filter(merchant.MerchantTimings.uuid == merchant_uuid).update({key: new_time})
+                times[key] = new_time.strftime("%I:%M%p")
+
+        
+        try:
+            db.session.commit()
+            failed = False
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            failed = True
+            return jsonify(error=500, text=str(e)), 500
+
+        if not failed:
+            result = {
+                'merchant_uuid': merchant_uuid
+            }
+            result.update(times)
+            return jsonify(result), 200
+        # raise NotImplementedError
     elif request.method == 'GET':
-        raise NotImplementedError
+        props = ['saturday_start', 'saturday_end', 'sunday_start', 'sunday_end', 'monday_start', 'monday_end', 'tuesday_start', 'tuesday_end', 'wednesday_start', 'wednesday_end', 'thursday_start', 'thursday_end', 'friday_start', 'friday_end']
+        try:
+            # db.session.query(merchant.MerchantTimings).filter(merchant.MerchantTimings.uuid == merchant_uuid).fetch
+            # timings = db.session.query(merchant.MerchantTimings).get(merchant_uuid)
+            # timings = db.session.query(merchant.MerchantTimings).filter(merchant.MerchantTimings.uuid == merchant_uuid).first()
+            
+            merchants = db.session.query(merchant.MerchantTimings).first()
+
+            timings = {}
+            timings['uuid'] = merchants.uuid
+            # for prop in props:
+
+            if merchants.saturday_start:
+                timings['saturday_start'] = merchants.saturday_start.strftime("%I:%M%p")
+
+            if merchants.saturday_end:
+                timings['saturday_end'] = merchants.saturday_end.strftime("%I:%M%p")
+
+            if merchants.sunday_start:
+                timings['sunday_start'] = merchants.sunday_start.strftime("%I:%M%p")
+            
+            if merchants.sunday_end:
+                timings['sunday_end'] = merchants.sunday_end.strftime("%I:%M%p")
+
+            if merchants.monday_start:
+                timings['monday_start'] = merchants.monday_start.strftime("%I:%M%p")
+
+            if merchants.monday_end:
+                timings['monday_end'] = merchants.monday_end.strftime("%I:%M%p")
+
+            if tuesday_start:
+                timings['tuesday_start'] = merchants.tuesday_start.strftime("%I:%M%p")
+            
+            if merchants.tuesday_end:
+                timings['tuesday_end'] = merchants.tuesday_end.strftime("%I:%M%p")
+
+            if merchants.wednesday_start:
+                timings['wednesday_start'] = merchants.wednesday_start.strftime("%I:%M%p")
+
+            if merchants.wednesday_end:
+                timings['wednesday_end'] = merchants.wednesday_end.strftime("%I:%M%p")
+
+            if merchants.thursday_start:
+                timings['thursday_start'] = merchants.thursday_start.strftime("%I:%M%p")
+            
+            if merchants.thursday_end:
+                timings['thursday_end'] = merchants.thursday_end.strftime("%I:%M%p")
+
+            if merchants.friday_start:
+                timings['friday_start'] = merchants.friday_start.strftime("%I:%M%p")
+            
+            if merchants.friday_end:
+                timings['friday_end'] = merchants.friday_end.strftime("%I:%M%p")            
+
+            for prop in props:
+                if prop not in timings:
+                    timings[prop] = None
+            return jsonify(timings), 200
+        except Exception as e:
+            print(e)
+            # db.session.rollback()
+            failed = True
+            return jsonify(error=500, text=str(e)), 500
 
 @app.route('/api/v1/counter/merchant/<merchant_uuid>/register', methods=['POST'])
 def register_merchant_counter(merchant_uuid):
