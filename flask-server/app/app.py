@@ -613,6 +613,29 @@ def register_merchant_counter(merchant_uuid):
             'counter_sequence': 0,
         }), 200
 
+
+"""
+*** REQUIRED COOKIE TO BE SET ***
+
+curl -X PUT \
+  http://localhost:5000/api/v1/counter/merchant/700769e9-5a1d-4941-b24f-cf15fde640c7/2b210baf-d29d-4293-948d-cb1cb50572cd/updateSequence \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Length: ' \
+  -H 'Cookie: merchant_auth=fubglvvijxnpaanc' \
+  -H 'Host: localhost:5000' \
+  -H 'Postman-Token: fe59893a-b310-4860-86e4-e0422b6d377a,4bc2733f-4876-4036-a45c-91aae0d2a81a' \
+  -H 'User-Agent: PostmanRuntime/7.15.2' \
+  -H 'cache-control: no-cache'
+
+Reponse:
+
+{
+  "new_sequence": 10
+}
+"""
 @app.route('/api/v1/counter/merchant/<merchant_uuid>/<counter_uuid>/updateSequence', methods=['PUT'])
 def update_sequence(merchant_uuid, counter_uuid):
     
