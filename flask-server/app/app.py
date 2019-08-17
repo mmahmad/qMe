@@ -556,13 +556,62 @@ def search_merchant():
 
     pass
 
+"""
+curl -X POST \
+  http://localhost:5000/api/v1/counter/merchant/700769e9-5a1d-4941-b24f-cf15fde640c7/register \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Length: 361' \
+  -H 'Content-Type: multipart/form-data; boundary=--------------------------494335754056866360044188' \
+  -H 'Host: localhost:5000' \
+  -H 'Postman-Token: 3619be59-9dfb-4614-80b2-2753f5474226,c20b4f1e-0c34-4eff-9d2c-8298894da480' \
+  -H 'User-Agent: PostmanRuntime/7.15.2' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -F access_id=gkqmvtrvifrkgffihlpoyttm \
+  -F access_key=oqrephadtijpeofyvdakuascnsczhgubsbserngsbawypmfuhrcauouuoffjsfaz
+
+Reponse:
+{
+  "counter_identifier": null,
+  "counter_sequence": 0,
+  "counter_uuid": "2b210baf-d29d-4293-948d-cb1cb50572cd",
+  "merchant_uuid": "700769e9-5a1d-4941-b24f-cf15fde640c7"
+}
+"""
 @app.route('/api/v1/counter/merchant/<merchant_uuid>/register', methods=['POST'])
 def register_merchant_counter(merchant_uuid):
-    return jsonify({
-    'merchant_uuid': merchant_uuid,
-    'merchant_access_id': merchant_access_id,
-    'merchant_access_key': merchant_access_key
-    }), 200
+
+    # make sure we have access_id and access_key so that no unauthorized addition of counters
+    # is possible
+    if not (request.form.get('access_id') and request.form.get('access_key')):
+        return jsonify("Unauthorized Access"), 401
+    
+    # create counter uuid
+    counter_uuid = str(uuid.uuid4())
+
+
+    merch_counter = merchant.MerchantCounter(counter_uuid=counter_uuid, merchant_uuid=merchant_uuid, counter_identifier=None, counter_sequence=None)
+
+    db.session.add(merch_counter)
+    try:
+        db.session.commit()
+        failed = False
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+        failed = True
+        return jsonify(error=500, text=str(e)), 500
+
+    if not failed:
+        return jsonify({
+            'counter_uuid': counter_uuid,
+            'merchant_uuid': merchant_uuid,
+            'counter_identifier': None,
+            'counter_sequence': 0,
+        }), 200
 
 def generate_merchant_auth(stringLength=16):
     """Generate a random string of fixed length """

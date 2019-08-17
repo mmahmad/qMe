@@ -121,3 +121,21 @@ class MerchantTimings(db.Model):
         self.thursday_end = thursday_end
         self.friday_start = friday_start
         self.friday_end = friday_end
+    
+
+class MerchantCounter(db.Model):
+    """Simple database model to track merchant counters."""
+
+    __tablename__ = 'merchants_counters'
+
+    counter_uuid = db.Column(db.String(), primary_key=True, nullable=False)
+    merchant_uuid = db.Column(db.String(), db.ForeignKey('merchants.uuid'), nullable=False)
+
+    counter_identifier = db.Column(db.String())
+    counter_sequence = db.Column(db.Integer(), nullable=False, default=0)
+
+    def __init__(self, counter_uuid=None, merchant_uuid=None, counter_identifier=None, counter_sequence=None):
+        self.counter_uuid = counter_uuid
+        self.merchant_uuid = merchant_uuid
+        self.counter_identifier = counter_identifier
+        self.counter_sequence = counter_sequence
