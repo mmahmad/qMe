@@ -613,6 +613,36 @@ def register_merchant_counter(merchant_uuid):
             'counter_sequence': 0,
         }), 200
 
+@app.route('/api/v1/counter/merchant/<merchant_uuid>/<counter_uuid>/updateSequence', methods=['PUT'])
+def update_sequence(merchant_uuid, counter_uuid):
+    
+    merchant_auth = request.cookies.get('merchant_auth')
+    if not merchant_auth:
+        return jsonify("Unauthorized Access"), 401
+    
+    # TODO: Confirm that the merchant_uuid and merchant_auth are for the same merchants
+
+    # Get current sequence # FIXIT: Currently assumes just one counter per merchant. For > 1 counters, get max sequence then increment it.
+    current_counter = db.session.query(merchant.MerchantCounter).filter(merchant.MerchantCounter.merchant_uuid == merchant_uuid and merchant.MerchantCounter.counter_uuid == counter_uuid).first()
+    db.session.query(merchant.MerchantCounter).filter(merchant.MerchantCounter.merchant_uuid == merchant_uuid and merchant.MerchantCounter.counter_uuid == counter_uuid).update({'counter_sequence': current_counter.counter_sequence + 1})
+
+    try:
+        db.session.commit()
+        failed = False
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+        failed = True
+        return jsonify(error=500, text=str(e)), 500
+
+    if not failed:
+        current_counter = db.session.query(merchant.MerchantCounter).filter(merchant.MerchantCounter.merchant_uuid == merchant_uuid and merchant.MerchantCounter.counter_uuid == counter_uuid).first()
+        result = {
+            'new_sequence': current_counter.counter_sequence
+        }
+        return jsonify(result), 200
+
+
 def generate_merchant_auth(stringLength=16):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
