@@ -466,6 +466,96 @@ def set_merchant_timings(merchant_uuid):
             failed = True
             return jsonify(error=500, text=str(e)), 500
 
+"""
+curl -X GET \
+  'http://localhost:5000/api/v1/merchants?merchant=Walmart' \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Connection: keep-alive' \
+  -H 'Postman-Token: a722ad08-fb4d-4b3e-a132-09fae34ffcfe,fb2d1bd4-088f-4411-a6f1-872947447c49' \
+  -H 'Referer: http://localhost:5000/api/v1/merchants?merchant=Walmart' \
+  -H 'User-Agent: PostmanRuntime/7.15.2' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -F merchant=Walmart
+
+Response:
+
+[
+  {
+    "merchant_address_1": "105 N Busey Avenue",
+    "merchant_address_2": "Apt 104",
+    "merchant_address_city": "Urbana",
+    "merchant_address_country": "USA",
+    "merchant_address_state": "IL",
+    "merchant_address_zipcode": "61801",
+    "merchant_name": "Walmart",
+    "merchant_primary_email": "moaaz123@gmail.com",
+    "merchant_primary_phone": "6179094234",
+    "merchant_uuid": "5a795a93-c851-44c4-9017-2c83234db208"
+  },
+  {
+    "merchant_address_1": "105 N Busey Avenue",
+    "merchant_address_2": "Apt 104",
+    "merchant_address_city": "Urbana",
+    "merchant_address_country": "USA",
+    "merchant_address_state": "IL",
+    "merchant_address_zipcode": "61801",
+    "merchant_name": "Walmart",
+    "merchant_primary_email": "moaaz1234@gmail.com",
+    "merchant_primary_phone": "6179094234",
+    "merchant_uuid": "35cfc9c6-8336-4b10-b239-7eb1bc11091f"
+  },
+  {
+    "merchant_address_1": "306 E University",
+    "merchant_address_2": "",
+    "merchant_address_city": "Champaign",
+    "merchant_address_country": "USA",
+    "merchant_address_state": "IL",
+    "merchant_address_zipcode": "61820",
+    "merchant_name": "Walmart",
+    "merchant_primary_email": "walmart@gmail.com",
+    "merchant_primary_phone": "217200255",
+    "merchant_uuid": "d1e896f1-17af-4694-9245-b4f29f5c13e7"
+  }
+]
+"""
+
+@app.route('/api/v1/merchants/', methods=['GET'])
+def search_merchant():
+    print("merchant arg:")
+    merchant_query = request.args.get('merchant')
+    
+    print(merchant_query)
+    # location_query = request.args.get('location')
+
+    # merchants = db.session.query(merchant.Merchant).filter(merchant.Merchant.name.match(merchant_query)).all()
+    merchants = db.session.query(merchant.Merchant).filter(merchant.Merchant.name == (merchant_query)).all()
+    
+    merchants_list = []
+
+    for m in merchants:
+        merchants_list.append({
+            'merchant_uuid': m.uuid,
+            'merchant_name': m.name,
+            'merchant_address_1': m.address_1,
+            'merchant_address_2': m.address_2,
+            'merchant_address_city': m.address_city,
+            'merchant_address_state': m.address_state,
+            'merchant_address_zipcode': m.address_zipcode,
+            'merchant_address_country': m.address_country,
+            'merchant_primary_email': m.primary_email,
+            'merchant_primary_phone': m.primary_phone 
+        })
+
+
+    # print(merchants)
+    return jsonify(merchants_list), 200
+
+
+    pass
+
 @app.route('/api/v1/counter/merchant/<merchant_uuid>/register', methods=['POST'])
 def register_merchant_counter(merchant_uuid):
     return jsonify({
