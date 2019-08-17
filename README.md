@@ -1,6 +1,6 @@
 # QMe
 
-IN DEVELOPMENT
+UNDER DEVELOPMENT
 
 ## Development server
 
@@ -24,3 +24,5 @@ To access Postgres from host: `host='localhost'` and `port=32000`
 To access Postgres from container: `host='postgres'` and `port=5432`
 
 The front-end app will automatically reload if you change any of the source files.
+
+To stop all running services and containers: `./stop.sh`
