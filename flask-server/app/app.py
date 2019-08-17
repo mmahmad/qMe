@@ -40,9 +40,11 @@ db = SQLAlchemy(app)
 # initialize database migration management
 migrate = Migrate(app, db)
 
+
 @app.route('/')
 def hello_whale():
     return 'Hello World!'
+
 
 @app.route('/guest')
 def view_registered_guests():
