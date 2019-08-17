@@ -1,0 +1,43 @@
+<div class="container">
+  <h1>Login</h1>
+  <form>
+      <div class="form-group">
+          <label for="name">First Name</label>
+          <input type="text" class="form-control" id="fname" [(ngModel)]="user.fName" name="fname" required>
+        </div>
+        <div class="form-group">
+            <label for="name">Last Name</label>
+            <input type="text" class="form-control" id="lname" [(ngModel)]="user.lName" name="lname" required>
+          </div>
+
+
+    <div class="form-group">
+        <label for="password">Email</label>
+        <input type="text" class="form-control" id="password" [(ngModel)]="user.email" type="email" name="email" required>
+      </div>
+
+    <div class="form-group">
+      <label for="name">Username</label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="user.username" name="username" required>
+    </div>
+
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="text" class="form-control" id="password" [(ngModel)]="user.password" type="password" name="password" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Confirm Password</label>
+      <input type="text" class="form-control" id="password" [(ngModel)]="user.confirm_password" type="password" name="confirm_password" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Phone Number</label>
+      <input type="text" class="form-control" id="password" [(ngModel)]="user.phone_number" type="text" name="phone_number" required>
+    </div>
+
+    <button (click)="registerUser" class="btn btn-success">Submit</button>
+  </form>
+</div>
+

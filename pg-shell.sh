@@ -1,1 +1,2 @@
-docker exec -it postgres bash
+#!/bin/bash
+docker exec -it postgres /bin/sh
